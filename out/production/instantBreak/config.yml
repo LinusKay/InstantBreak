@@ -1,0 +1,8 @@
+use_blacklist: true
+blacklist:
+  - ORANGE_WOOL
+  - DIAMOND
+use_whitelist: false
+whitelist:
+  - GRASS_BLOCK
+  - STONE
