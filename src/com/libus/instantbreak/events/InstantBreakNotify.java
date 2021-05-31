@@ -36,7 +36,7 @@ public class InstantBreakNotify implements Listener {
             String itemType = item.getType().toString();
             List<String> allowedItems = plugin.getConfig().getStringList("item_whitelist");
             String message = plugin.getConfig().getString("notify_active_item_message");
-            if (allowedItems != null && allowedItems.contains(itemType)) {
+            if (message != null && allowedItems.contains(itemType)) {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(TextComponent.fromLegacyText(message)));
             }
         }

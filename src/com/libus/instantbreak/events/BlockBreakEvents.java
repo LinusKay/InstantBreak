@@ -1,15 +1,12 @@
 package com.libus.instantbreak.events;
 
 import com.libus.instantbreak.Main;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ public class BlockBreakEvents implements Listener {
 
     private final int cooldown;
 
-    private List<Player> cooldownList = new ArrayList<>();
+    private final List<Player> cooldownList = new ArrayList<>();
 
     public BlockBreakEvents(Main plugin) {
         this.plugin = plugin;
@@ -70,11 +67,11 @@ public class BlockBreakEvents implements Listener {
     /**
      * add player to cooldown list and remove after cooldown time
      *
-     * @param player
+     * @param player player to add to cooldown list
      */
     public void setCooldownTimer(Player player) {
         cooldownList.add(player);
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> cooldownList.remove(player), cooldown * 20);
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> cooldownList.remove(player), cooldown * 20L);
     }
 
     /**
@@ -106,10 +103,7 @@ public class BlockBreakEvents implements Listener {
     public boolean itemAllowedBreak(ItemStack item) {
         List<String> allowedItems = plugin.getConfig().getStringList("item_whitelist");
         String itemType = item.getType().toString();
-        if (allowedItems.contains(itemType)) {
-            return true;
-        }
-        return false;
+        return allowedItems.contains(itemType);
     }
 
 

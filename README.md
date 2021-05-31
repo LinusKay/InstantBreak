@@ -1,6 +1,7 @@
 # InstaBreak
 
-A Spigot plugin that allows players to instantly mine/break configured blocks.
+A Minecraft Spigot plugin that allows players to instantly mine/break configured blocks.
+NOTE: this plugin was built for and tested only on 1.16+. Compatibility with older versions is not guaranteed.
 ## Features
 * White/blacklisting to control which blocks can be instantly broken
 * Whitelisting for items players can instantly break blocks with
