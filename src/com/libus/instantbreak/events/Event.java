@@ -21,13 +21,18 @@ public class Event implements Listener {
 
     private final String permissionBreak;
     private final String permissionBypassWhitelist;
+    private final String permissionBypassCooldown;
+
+    private final int cooldown;
 
     private List<Player> cooldownList = new ArrayList<>();
 
     public Event(Main plugin) {
         this.plugin = plugin;
         this.permissionBreak = this.plugin.getConfig().getString("permission_break");
-        this.permissionBypassWhitelist = this.plugin.getConfig().getString("permission_whitelist_bypass");
+        this.permissionBypassWhitelist = this.plugin.getConfig().getString("permission_bypass_whitelist");
+        this.permissionBypassCooldown = this.plugin.getConfig().getString("permission_bypass_cooldown");
+        this.cooldown = plugin.getConfig().getInt("cooldown");
     }
 
     /**
@@ -42,23 +47,16 @@ public class Event implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack breakItem = player.getInventory().getItemInMainHand();
-        int cooldown = plugin.getConfig().getInt("cooldown");
         if (player.hasPermission(permissionBreak)) {
             if (itemAllowedBreak(breakItem)) {
                 if (blockAllowedBreak(block) || player.hasPermission(permissionBypassWhitelist)) {
                     BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
                     plugin.getServer().getPluginManager().callEvent(breakEvent);
                     if (!breakEvent.isCancelled()) {
-                        if(cooldown > 0){
+                        if(!player.hasPermission(permissionBypassCooldown) && cooldown > 0){
                             if(!cooldownList.contains(player)){
                                 block.breakNaturally();
-                                cooldownList.add(player);
-                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        cooldownList.remove(player);
-                                    }
-                                }, cooldown * 20);
+                                setCooldownTimer(player);
                             }
                         }
                         else{
@@ -68,6 +66,15 @@ public class Event implements Listener {
                 }
             }
         }
+    }
+
+    /**
+     * add player to cooldown list and remove after cooldown time
+     * @param player
+     */
+    public void setCooldownTimer(Player player){
+        cooldownList.add(player);
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> cooldownList.remove(player), cooldown * 20);
     }
 
     /**

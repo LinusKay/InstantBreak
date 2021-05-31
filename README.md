@@ -24,6 +24,11 @@ notify_active_item_message: §e§lInstant Break is now active!
 # cooldown time between instant block break
 cooldown: 5
 # change permission nodes
+# allow player to instantly break permitted blocks
 permission_break: "instantbreak.break"
+# allow player to bypass black/whitelist
+# this means they will ignore the black/whitelist, letting them break any block
 permission_whitelist_bypass: "instantbreak.whitelist.bypass"
+# allow player to bypass instant break cooldown
+permission_bypass_cooldown: "instantbreak.bypass.cooldown"
 ```
