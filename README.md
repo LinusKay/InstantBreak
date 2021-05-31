@@ -21,6 +21,8 @@ item_whitelist:
 # show message to player when whitelisted item is selected
 notify_active_item: true
 notify_active_item_message: §e§lInstant Break is now active!
+# cooldown time between instant block break
+cooldown: 5
 # change permission nodes
 permission_break: "instantbreak.break"
 permission_whitelist_bypass: "instantbreak.whitelist.bypass"

@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event implements Listener {
@@ -20,6 +21,8 @@ public class Event implements Listener {
 
     private final String permissionBreak;
     private final String permissionBypassWhitelist;
+
+    private List<Player> cooldownList = new ArrayList<>();
 
     public Event(Main plugin) {
         this.plugin = plugin;
@@ -39,13 +42,28 @@ public class Event implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack breakItem = player.getInventory().getItemInMainHand();
+        int cooldown = plugin.getConfig().getInt("cooldown");
         if (player.hasPermission(permissionBreak)) {
             if (itemAllowedBreak(breakItem)) {
                 if (blockAllowedBreak(block) || player.hasPermission(permissionBypassWhitelist)) {
                     BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
                     plugin.getServer().getPluginManager().callEvent(breakEvent);
                     if (!breakEvent.isCancelled()) {
-                        block.breakNaturally();
+                        if(cooldown > 0){
+                            if(!cooldownList.contains(player)){
+                                block.breakNaturally();
+                                cooldownList.add(player);
+                                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cooldownList.remove(player);
+                                    }
+                                }, cooldown * 20);
+                            }
+                        }
+                        else{
+                            block.breakNaturally();
+                        }
                     }
                 }
             }

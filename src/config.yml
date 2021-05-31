@@ -11,5 +11,6 @@ item_whitelist:
   - DIAMOND_PICKAXE
 notify_active_item: true
 notify_active_item_message: §e§lInstant Break is now active!
+cooldown: 5
 permission_break: "instantbreak.break"
 permission_whitelist_bypass: "instantbreak.whitelist.bypass"
