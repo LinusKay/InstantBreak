@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Event implements Listener {
+public class BlockBreakEvents implements Listener {
 
     private final Main plugin;
 
@@ -27,7 +27,7 @@ public class Event implements Listener {
 
     private List<Player> cooldownList = new ArrayList<>();
 
-    public Event(Main plugin) {
+    public BlockBreakEvents(Main plugin) {
         this.plugin = plugin;
         this.permissionBreak = this.plugin.getConfig().getString("permission_break");
         this.permissionBypassWhitelist = this.plugin.getConfig().getString("permission_bypass_whitelist");
@@ -53,13 +53,12 @@ public class Event implements Listener {
                     BlockBreakEvent breakEvent = new BlockBreakEvent(block, player);
                     plugin.getServer().getPluginManager().callEvent(breakEvent);
                     if (!breakEvent.isCancelled()) {
-                        if(!player.hasPermission(permissionBypassCooldown) && cooldown > 0){
-                            if(!cooldownList.contains(player)){
+                        if (!player.hasPermission(permissionBypassCooldown) && cooldown > 0) {
+                            if (!cooldownList.contains(player)) {
                                 block.breakNaturally();
                                 setCooldownTimer(player);
                             }
-                        }
-                        else{
+                        } else {
                             block.breakNaturally();
                         }
                     }
@@ -70,9 +69,10 @@ public class Event implements Listener {
 
     /**
      * add player to cooldown list and remove after cooldown time
+     *
      * @param player
      */
-    public void setCooldownTimer(Player player){
+    public void setCooldownTimer(Player player) {
         cooldownList.add(player);
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> cooldownList.remove(player), cooldown * 20);
     }
@@ -112,26 +112,5 @@ public class Event implements Listener {
         return false;
     }
 
-
-    /**
-     * Send message to player letting them know their item may be used for instant break
-     *
-     * @param event PlayerItemHeldEvent runs when player changes selected item
-     */
-    @EventHandler
-    public void notifySelectedItemAllowed(PlayerItemHeldEvent event) {
-        boolean showMessage = plugin.getConfig().getBoolean("notify_active_item");
-        Player player = event.getPlayer();
-        if(player.hasPermission(permissionBreak) && showMessage) {
-            int slotNumber = event.getNewSlot();
-            ItemStack item = player.getInventory().getItem(slotNumber);
-            String itemType = item.getType().toString();
-            List<String> allowedItems = plugin.getConfig().getStringList("item_whitelist");
-            String message = plugin.getConfig().getString("notify_active_item_message");
-            if (allowedItems != null && allowedItems.contains(itemType)) {
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(TextComponent.fromLegacyText(message)));
-            }
-        }
-    }
 
 }
