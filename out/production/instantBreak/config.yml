@@ -1,8 +1,13 @@
-use_blacklist: true
-blacklist:
+use_block_blacklist: true
+block_blacklist:
   - ORANGE_WOOL
-  - DIAMOND
-use_whitelist: false
-whitelist:
+  - DIAMOND_BLOCK
+use_block_whitelist: false
+block_whitelist:
   - GRASS_BLOCK
   - STONE
+use_item_whitelist: true
+item_whitelist:
+  - DIAMOND_PICKAXE
+notify_active_item: true
+notify_active_item_message: §e§lInstant Break is now active!

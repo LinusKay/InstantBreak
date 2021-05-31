@@ -14,6 +14,14 @@ use_whitelist: false
 whitelist:
   - GRASS_BLOCK
   - STONE
-items:
+# whitelist only certain items
+use_item_whitelist: true
+item_whitelist:
   - DIAMOND_PICKAXE
+# show message to player when whitelisted item is selected
+notify_active_item: true
+notify_active_item_message: §e§lInstant Break is now active!
+# change permission nodes
+permission_break: "instantbreak.break"
+permission_whitelist_bypass: "instantbreak.whitelist.bypass"
 ```
