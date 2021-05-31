@@ -1,8 +1,15 @@
 # InstaBreak
 
 A Spigot plugin that allows players to instantly mine/break configured blocks.
-
+## Features
+* White/blacklisting to control which blocks can be instantly broken
+* Whitelisting for items players can instantly break blocks with
+* Custom permission nodes with bypasses
+* Configurable cooldown timer
+* Configurable user messages
 ```yaml
+# config.yml
+
 # only either use_blacklist or use_whitelist should be true
 # blacklist is better for disallowing a small amount of blocks
 # whitelist is better for disallowing a large amount of blocks
